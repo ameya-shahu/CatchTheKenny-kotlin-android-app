@@ -11,14 +11,29 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
-    var score :Int = 0        // variable to store score
+    private var score :Int = 0        // variable to store score
     var imageArray = ArrayList<ImageView>() //imageview array to store all the image view of kennys
 
     var handler : Handler = Handler()  //handler to handle runnable
-    var runnable : Runnable = Runnable{ }//runnable for animation of kenny images
+
+    var runnable : Runnable = object : Runnable{ //to run animation of kenny
+        override fun run() {
+            hideImages()
+            //generating random variable
+            //val random = Random()
+            val index = Random.nextInt(8-0)
+
+            //visible any one image from grid
+            imageArray[index].visibility =  View.VISIBLE
+            handler.postDelayed(this,300)
+        }
+
+    }
+
+
 
     //time calculation object
-    var timeout =  object : CountDownTimer(10000,1000) {
+    private var timeout =  object : CountDownTimer(10000,1000) {
         override fun onFinish() {
             textViewTime.text = "Time is off"
             handler.removeCallbacks(runnable)
@@ -56,19 +71,6 @@ class MainActivity : AppCompatActivity() {
 
     //function will start animation of kenny's images by select them randomly and make them visible
     private fun startKennyAnimaton(){
-        runnable = object : Runnable{
-            override fun run() {
-                hideImages()
-                //generating random variable
-                //val random = Random()
-                val index = Random.nextInt(8-0)
-
-                //visible any one image from grid
-                imageArray[index].visibility =  View.VISIBLE
-                handler.postDelayed(runnable,500)
-            }
-
-        }
         handler.post(runnable)
     }
 
